@@ -41,6 +41,15 @@ inline static boolean PeHeaderCheck(void* base) {
 	return true;
 }
 
+static void* RvaToPtr(void* baseaddr, DWORD rva) {
+	if (!baseaddr || !rva) return nullptr;
+	auto* dos = reinterpret_cast<IMAGE_DOS_HEADER*>(base);
+	auto* nt = reinterpret_cast<IMAGE_NT_HEADERS*>((BYTE*)base + dos->e_lfanew);
+
+	if (rva >= nt->OptionalHeader.SizeOfImage) return nullptr;
+	return (BYTE*)baseaddr + rva;
+}
+
 
 FARPROC WINAPI GetProc(HMODULE* moduleBase, const char* functionName) {
 	if (!moduleBase || !functionName) {
@@ -48,12 +57,41 @@ FARPROC WINAPI GetProc(HMODULE* moduleBase, const char* functionName) {
 	}
 	void* baseaddr = reinterpret_cast<void*>(moduleBase);
 
+	// Check if addresses are valid
 	if(!PeHeaderCheck(baseaddr)){
 		return nullptr;
 	}
+	// Pointers to headers 
 	IMAGE_DOS_HEADER* dos = reinterpret_cast<IMAGE_DOS_HEADER*>(baseaddr);
 	IMAGE_NT_HEADERS* nt = reinterpret_cast<IMAGE_NT_HEADERS*>(baseaddr+dos->e_lfanew);
 	IMAGE_OPTIONAL_HEADER* opt = &nt->OptionalHeader;
+
+	if (opt->NumberOfRvaAndSizes <= IMAGE_DIRECTORY_ENTRY_EXPORT) return nullptr;
+	IMAGE_DATA_DIRECTORY* dir = opt->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
+	if (!dir->VirtualAddress) return nullptr;
+
+	IMAGE_EXPORT_DIRECTORY* exportDir = reinterpret_cast<IMAGE_EXPORT_DIRECTORY*>(RvaToPtr(baseaddr, dir->VirtualAddress));
+	if (!exportDir) return nullptr; 
+
+	// Resolve addresses to EAT, name table, and ordinal table
+	DWORD* functions = reinterpret_cast<DWORD*>(RvaToPtr(baseaddr, exportDir->AddressOfFunctions));
+	DWORD* names = reinterpret_cast<DWORD*>(RvaToPtr(baseaddr, exportDir->AddressOfNames));
+	WORD* ordinals = reinterpret_cast<WORD*>(RvaToPtr(baseaddr, exportDir->AddressOfNameOrdinals));
+	if (!functions || !names || !ordinals) return nullptr;
+
+
+	if (DWORD i = 0; i < exportDir->NumberOfNames; i++) {
+		char* namePtr = reinterpret_cast<char*>(RvaToPtr(baseaddr, names[i]));
+		if (!namePtr) continue;
+
+		if (_wcsicmp(namePtr, functionName) == 0) {
+			DWORD* funcRVA = functions[ordinals[i]];
+			return reinterpret_cast<FARPROC>(RvaToPtr(baseaddr, funcRVA));
+		}
+	}
+
+	return nullptr;
+
 }
 
 
