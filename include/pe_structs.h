@@ -8,6 +8,12 @@
 // PE Structures to be used for loader
 // ------------------------------------------------------------
 
+struct CLIENT_ID
+{
+	HANDLE UniqueProcess;
+	HANDLE UniqueThread;
+};
+
 //https://processhacker.sourceforge.io/doc/ntpebteb_8h_source.html#l00166
 struct TEB
 {

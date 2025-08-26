@@ -58,4 +58,67 @@ CMake Overview
 # ---- Backup / misc ----
 *.bak
 *.swp
-*~
+*~# ---- Local build dirs (common) ----
+out/
+build*/
+cmake-build-*/
+
+# ---- Ninja / CLion / alt CMake generators ----
+*.ninja
+.ninja_*
+build.ninja
+rules.ninja
+
+# ---- MSVC intermediates ----
+*.idb
+*.ipdb
+*.iobj
+*.rsp
+*.tlog
+*.lastbuildstate
+*.unsuccessfulbuild
+*.exp
+*.manifest
+*.pch
+*.gch
+
+# ---- Coverage / profiling ----
+*.gcno
+*.gcda
+*.gcov
+*.profraw
+*.profdata
+coverage/
+lcov.info
+
+# ---- Crash dumps ----
+*.dmp
+
+# ---- Package managers / toolchains ----
+.vcpkg/
+vcpkg_installed/
+installed/
+.conan/
+.conan2/
+conanbuildinfo.*
+CMakeUserPresets.json  # user-specific; keep CMakePresets.json if you use it
+
+# ---- Editors / IDEs ----
+.vscode/
+.idea/
+*.code-workspace
+
+# ---- OS cruft ----
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ---- Clang / LLVM artifacts ----
+*.d                
+*.i                
+*.ll               
+*.bc               
+*.pcm              
+ModuleCache*/      
+.thinlto-cache/    
