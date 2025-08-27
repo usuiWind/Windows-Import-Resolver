@@ -86,7 +86,7 @@ void* WINAPI GetProc(HMODULE moduleBase, const char* functionName) {
 		WORD ordinal = static_cast<WORD>(intName);
 
 		DWORD funcRVA = functions[ordinal - exportDir->Base];
-		if (funcRVA) {
+		if (!funcRVA) {
 			return nullptr;
 		}
 
