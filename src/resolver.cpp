@@ -2,7 +2,7 @@
 #include <resolver.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 
 HMODULE WINAPI GetModule(LPCWSTR module_name) {
 	PEB* peb = ((PEB*)((TEB*)((TEB*)NtCurrentTeb())->ProcessEnvironmentBlock));
@@ -21,7 +21,7 @@ HMODULE WINAPI GetModule(LPCWSTR module_name) {
 	{
 		LDR_DATA_TABLE_ENTRY* pEntry = CONTAINING_RECORD(pEntryList, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks); // Table entry
 
-		if (strcmp(reinterpret_cast<const char*>(pEntry->BaseDllName.Buffer), reinterpret_cast<const char*>(module_name))) {  //Compare the names of modules
+		if (_wcsicmp(pEntry->BaseDllName.Buffer, module_name) == 0) {  //Compare the names of modules
 			return reinterpret_cast<HMODULE>(pEntry->DllBase);
 		}
 	}
@@ -80,6 +80,19 @@ FARPROC WINAPI GetProc(HMODULE moduleBase, const char* functionName) {
 	WORD* ordinals = reinterpret_cast<WORD*>(RvaToPtr(baseaddr, exportDir->AddressOfNameOrdinals));
 	if (!functions || !names || !ordinals) return nullptr;
 
+	// Check for ordinal and resolve 
+	uintptr_t intName = reinterpret_cast<uintptr_t>(functionName);
+	if ((intName >> 16) == 0) {
+		WORD ordinal = static_cast<WORD>(intName);
+
+		DWORD funcRVA = functions[ordinal - exportDir->Base];
+		if (funcRVA) {
+			return nullptr;
+		}
+
+		return reinterpret_cast<FARPROC>(RvaToPtr(baseaddr, funcRVA));
+	}
+
 
 	for (DWORD i = 0; i < exportDir->NumberOfNames; i++) {
 		char* namePtr = reinterpret_cast<char*>(RvaToPtr(baseaddr, names[i]));
@@ -89,8 +102,33 @@ FARPROC WINAPI GetProc(HMODULE moduleBase, const char* functionName) {
 			WORD ord = ordinals[i];
 			DWORD funcRVA = functions[ord];
 
+			// If the forwarder lies in export directory 
 			if (funcRVA >= dir->VirtualAddress && funcRVA < dir->VirtualAddress + dir->Size) {
-				return nullptr;
+				const char* forward = reinterpret_cast<const char*>(RvaToPtr(baseaddr, funcRVA));
+				if (!forward) return nullptr; 
+				
+				const char* dot = strchr(forward, '.'); 
+				if (!dot || dot == forward) return nullptr;
+
+				// Seperate the dll part and sym part
+				std::string dll(forward, static_cast<size_t>(dot - forward));
+				std::string sym(dot + 1);
+
+				// Checks if  dll is part of  name 
+				if (_stricmp(dll.c_str() + dll.size() - 4, ".dll") != 0) {
+					dll.append(".dll");
+				}
+
+				std::wstring wdll(dll.begin(), dll.end());
+				HMODULE targetDll = GetModule(wdll.c_str());
+
+				// Forwarder uses ordinals instead 
+				if (sym[0] == '#') {
+					WORD ordinal = static_cast<WORD>(strtoul(sym.c_str() + 1, nullptr, 10));
+					return GetProc(targetDll, reinterpret_cast<const char*>(static_cast<uintptr_t>(ordinal)));
+				}
+
+				return GetProc(targetDll, sym.c_str());
 			}
 
 			return reinterpret_cast<FARPROC>(RvaToPtr(baseaddr, funcRVA));
