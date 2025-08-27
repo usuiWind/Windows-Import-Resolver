@@ -52,7 +52,7 @@ static void* RvaToPtr(void* baseaddr, DWORD rva) {
 }
 
 
-FARPROC WINAPI GetProc(HMODULE moduleBase, const char* functionName) {
+void* WINAPI GetProc(HMODULE moduleBase, const char* functionName) {
 	if (!moduleBase || !functionName) {
 		return nullptr;
 	}
@@ -90,7 +90,7 @@ FARPROC WINAPI GetProc(HMODULE moduleBase, const char* functionName) {
 			return nullptr;
 		}
 
-		return reinterpret_cast<FARPROC>(RvaToPtr(baseaddr, funcRVA));
+		return (RvaToPtr(baseaddr, funcRVA));
 	}
 
 
@@ -131,7 +131,7 @@ FARPROC WINAPI GetProc(HMODULE moduleBase, const char* functionName) {
 				return GetProc(targetDll, sym.c_str());
 			}
 
-			return reinterpret_cast<FARPROC>(RvaToPtr(baseaddr, funcRVA));
+			return (RvaToPtr(baseaddr, funcRVA));
 		}
 	}
 
