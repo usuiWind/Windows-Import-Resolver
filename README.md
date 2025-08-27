@@ -12,7 +12,7 @@ This library implements manual PE parsing by walking the Process Environment Blo
 - Anti-analysis and evasion techniques
 - Educational purposes for understanding Windows internals
 
-Diagrams: 
+Diagrams: https://github.com/usuiWind/Windows-pe-walker/blob/main/diagrams.md
 
 ## Features
 
