@@ -1,7 +1,5 @@
 # PE Resolver Documentation - Diagrams
 
-# PE Resolver Documentation - Diagrams
-
 ## 1. PEB Walking Structure (GetModule Function)
 
 ```mermaid
@@ -16,12 +14,12 @@ graph TD
     F --> I[DllBase: 0x7FF900000000]
     G --> J[DllBase: 0x7FF700000000]
     
-    style A fill:#e1f5fe
-    style B fill:#f3e5f5
-    style C fill:#fff3e0
-    style E fill:#e8f5e8
-    style F fill:#e8f5e8
-    style G fill:#e8f5e8
+    style A fill:#1e293b
+    style B fill:#374151
+    style C fill:#475569
+    style E fill:#22c55e
+    style F fill:#22c55e
+    style G fill:#22c55e
 ```
 
 ## 2. PE File Structure Layout
@@ -38,13 +36,13 @@ graph TD
     G --> I[Function Names]
     G --> J[Ordinals]
     
-    style A fill:#ffebee
-    style B fill:#e8f5e8
-    style C fill:#fff3e0
-    style F fill:#e1f5fe
-    style H fill:#f3e5f5
-    style I fill:#f3e5f5
-    style J fill:#f3e5f5
+    style A fill:#1e293b
+    style B fill:#22c55e
+    style C fill:#475569
+    style F fill:#3b82f6
+    style H fill:#8b5cf6
+    style I fill:#8b5cf6
+    style J fill:#8b5cf6
 ```
 
 ## 3. GetProc Function Flow
@@ -71,9 +69,9 @@ flowchart TD
     M -->|No| O[Return Address]
     N --> O
     
-    style A fill:#e8f5e8
-    style C fill:#ffebee
-    style O fill:#e1f5fe
+    style A fill:#22c55e
+    style C fill:#ef4444
+    style O fill:#3b82f6
 ```
 
 ## 4. Export Address Table Structure
@@ -98,10 +96,10 @@ graph LR
     D1 -.-> B1
     D2 -.-> B2
     
-    style A fill:#e8f5e8
-    style B fill:#e1f5fe
-    style C fill:#fff3e0
-    style D fill:#f3e5f5
+    style A fill:#22c55e
+    style B fill:#3b82f6
+    style C fill:#475569
+    style D fill:#8b5cf6
 ```
 
 ## 5. Function Resolution Sequence
@@ -144,10 +142,10 @@ graph TB
     
     B --> D
     
-    style A fill:#e8f5e8
-    style B fill:#e1f5fe
-    style C fill:#fff3e0
-    style F fill:#ffebee
+    style A fill:#22c55e
+    style B fill:#3b82f6
+    style C fill:#475569
+    style F fill:#ef4444
 ```
 
 ## 7. Function Call Chain Example
@@ -161,8 +159,8 @@ flowchart LR
     E --> F[GetProc<br/>MessageBoxW]
     F --> G[Ready to Use]
     
-    style A fill:#e8f5e8
-    style G fill:#e1f5fe
+    style A fill:#22c55e
+    style G fill:#3b82f6
 ```
 
 ## 8. Error Handling Flow
@@ -179,11 +177,11 @@ flowchart TD
     H -->|No| I[Function Not Found]
     H -->|Yes| J[Success]
     
-    style C fill:#ffebee
-    style E fill:#ffebee
-    style G fill:#ffebee
-    style I fill:#ffebee
-    style J fill:#e8f5e8
+    style C fill:#ef4444
+    style E fill:#ef4444
+    style G fill:#ef4444
+    style I fill:#ef4444
+    style J fill:#22c55e
 ```
 
 ## 9. Data Structure Relationships
@@ -235,10 +233,10 @@ graph TB
         C2 -->|PE Resolver| C4[Clean Binary]
     end
     
-    style A3 fill:#ffebee
-    style B3 fill:#e8f5e8
-    style C3 fill:#ffebee
-    style C4 fill:#e8f5e8
+    style A3 fill:#ef4444
+    style B3 fill:#22c55e
+    style C3 fill:#ef4444
+    style C4 fill:#22c55e
 ```
 
 ## 11. Complete Process Flow
@@ -262,15 +260,13 @@ graph TB
     Search -->|Yes| Return2[Return Address]
     Search -->|No| Error2[Return NULL]
     
-    style Start fill:#e8f5e8
-    style End fill:#e8f5e8
-    style Error1 fill:#ffebee
-    style Error2 fill:#ffebee
-    style Return1 fill:#e1f5fe
-    style Return2 fill:#e1f5fe
+    style Start fill:#22c55e
+    style End fill:#22c55e
+    style Error1 fill:#ef4444
+    style Error2 fill:#ef4444
+    style Return1 fill:#3b82f6
+    style Return2 fill:#3b82f6
 ```
 
 
-For detailed diagrams: [View All Diagrams](DIAGRAMS.md)
-```
 
