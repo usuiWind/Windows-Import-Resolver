@@ -12,7 +12,6 @@ This library implements manual PE parsing by walking the Process Environment Blo
 - Anti-analysis and evasion techniques
 - Educational purposes for understanding Windows internals
 
-Diagrams: https://github.com/usuiWind/Windows-pe-walker/blob/main/diagrams.md
 
 ## Features
 
@@ -56,7 +55,7 @@ PE File Structure:
     ├── Function Name Array
     └── Ordinal Array
 ```
-Full PE structure diagram here: 
+
 ## Usage Example
 
 ```cpp
