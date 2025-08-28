@@ -122,10 +122,9 @@ Supports both named and ordinal-based function resolution:
 
 ## Known Limitations
 
-1. **x64 Only**: Currently hardcoded for 64-bit PE files
-2. **Windows Only**: Relies on Windows-specific structures (PEB/TEB)
-3. **CRT Dependencies**: Still requires some C runtime functions
-4. **Error Handling**: Limited error reporting and recovery
+1. **x64 Only**: Currently hardcoded for 64-bit PE files no 32-bit support
+2. **CRT Dependencies**: Still requires some C runtime functions
+3. **Error Handling**: Limited error reporting and recovery for memory
 
 ## Code Quality Issues
 
@@ -136,11 +135,12 @@ The current implementation has some bugs that need fixing:
 
 ## Future Improvements
 
-- [ ] Add x86/x64 compatibility layer
+- [ ] Add x86/x64 compatibility 
 - [ ] Implement syscall resolution
 - [ ] Add comprehensive error handling
 - [ ] Support for delay-loaded imports
 - [ ] Anti-debugging and anti-analysis features
+- [ ] Section manipulation for advanced evasion
 
 ## Educational Value
 
@@ -160,6 +160,7 @@ This software is provided for educational and authorized security research purpo
 - [Microsoft PE/COFF Specification](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format)
 - [Windows Internals Documentation](https://docs.microsoft.com/en-us/sysinternals/resources/windows-internals)
 - [Malware Analysis Techniques](https://www.sans.org/white-papers/malware-analysis/)
+- [Process Hacker PE structure documentation](https://processhacker.sourceforge.io/doc/index.html )
 
 ---
 
