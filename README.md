@@ -161,6 +161,7 @@ This software is provided for educational and authorized security research purpo
 - [Windows Internals Documentation](https://docs.microsoft.com/en-us/sysinternals/resources/windows-internals)
 - [Malware Analysis Techniques](https://www.sans.org/white-papers/malware-analysis/)
 - [Process Hacker PE structure documentation](https://processhacker.sourceforge.io/doc/index.html )
+- [Sektor7 Intermediate Malware Development](https://institute.sektor7.net/rto-maldev-intermediate)
 
 ---
 
